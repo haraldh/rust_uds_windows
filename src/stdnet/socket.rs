@@ -11,18 +11,20 @@ use std::time::Duration;
 
 use super::{cvt, last_error};
 
-use kernel32::{GetCurrentProcessId, SetHandleInformation};
-use winapi::{
-    socklen_t, AF_UNIX, DWORD, FIONBIO, HANDLE, INFINITE, INVALID_SOCKET, SOCKADDR, SOCKET,
-    SOCK_STREAM, SOL_SOCKET, SO_ERROR, WSADATA, WSAPROTOCOL_INFOW,
+use winapi::shared::minwindef::DWORD;
+use winapi::shared::ntdef::HANDLE;
+use winapi::shared::ws2def::{AF_UNIX, SOCKADDR, SOCK_STREAM, SOL_SOCKET, SO_ERROR};
+
+use winapi::um::handleapi::SetHandleInformation;
+use winapi::um::processthreadsapi::GetCurrentProcessId;
+use winapi::um::winbase::INFINITE;
+use winapi::um::winsock2::{
+    accept, closesocket, getsockopt as c_getsockopt, ioctlsocket, recv, send,
+    setsockopt as c_setsockopt, shutdown, WSADuplicateSocketW, WSASocketW, WSAStartup, FIONBIO,
+    INVALID_SOCKET, SOCKET, WSADATA, WSAPROTOCOL_INFOW,
 };
+use winapi::um::ws2tcpip::socklen_t;
 // use winapi::WSACleanup;
-use ws2_32::getsockopt as c_getsockopt;
-use ws2_32::setsockopt as c_setsockopt;
-use ws2_32::{
-    accept, closesocket, ioctlsocket, recv, send, shutdown, WSADuplicateSocketW, WSASocketW,
-    WSAStartup,
-};
 
 pub const WSA_FLAG_OVERLAPPED: DWORD = 0x01;
 pub const HANDLE_FLAG_INHERIT: DWORD = 0x01;
@@ -217,7 +219,7 @@ pub fn setsockopt<T>(sock: &Socket, opt: c_int, val: c_int, payload: T) -> io::R
     unsafe {
         let payload = &payload as *const T as *const _;
         cvt(c_setsockopt(
-            sock.as_raw_socket(),
+            sock.as_raw_socket() as usize,
             opt,
             val,
             payload,

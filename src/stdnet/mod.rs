@@ -5,8 +5,8 @@ use std::mem;
 use std::os::raw::{c_char, c_int};
 use std::path::Path;
 
-use winapi::SOCKADDR;
-use ws2_32::WSAGetLastError;
+use winapi::shared::ws2def::SOCKADDR;
+use winapi::um::winsock2::WSAGetLastError;
 
 mod ext;
 mod net;
@@ -15,9 +15,12 @@ mod socket;
 mod c {
     use std::ffi::CStr;
     use std::fmt;
-    use winapi::{self, ADDRESS_FAMILY, CHAR};
+    use winapi::{
+        self,
+        shared::{ntdef::CHAR, ws2def::ADDRESS_FAMILY},
+    };
 
-    pub const AF_UNIX: ADDRESS_FAMILY = winapi::AF_UNIX as _;
+    pub const AF_UNIX: ADDRESS_FAMILY = winapi::shared::ws2def::AF_UNIX as _;
 
     #[allow(non_camel_case_types)]
     #[derive(Copy, Clone)]

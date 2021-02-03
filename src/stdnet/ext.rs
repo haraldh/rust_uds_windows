@@ -10,13 +10,17 @@ use std::mem;
 use std::os::windows::prelude::*;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
-use winapi::{
-    c_int, u_long, BOOL, DWORD, FALSE, GUID, LPDWORD, LPINT, LPOVERLAPPED, LPSOCKADDR, OVERLAPPED,
-    PVOID, SIO_GET_EXTENSION_FUNCTION_POINTER, SOCKADDR, SOCKADDR_STORAGE, SOCKET, SOCKET_ERROR,
-    SOL_SOCKET, TRUE, WSABUF, WSA_IO_PENDING,
+use winapi::ctypes::c_int;
+use winapi::shared::guiddef::GUID;
+use winapi::shared::minwindef::{BOOL, DWORD, FALSE, LPDWORD, LPINT, TRUE};
+use winapi::shared::ntdef::PVOID;
+use winapi::shared::ws2def::{
+    LPSOCKADDR, SIO_GET_EXTENSION_FUNCTION_POINTER, SOCKADDR, SOCKADDR_STORAGE, SOL_SOCKET, WSABUF,
 };
-use ws2_32::{
-    bind, setsockopt, WSAGetLastError, WSAGetOverlappedResult, WSAIoctl, WSARecv, WSASend,
+use winapi::um::minwinbase::{LPOVERLAPPED, OVERLAPPED};
+use winapi::um::winsock2::{
+    bind, setsockopt, u_long, WSAGetLastError, WSAGetOverlappedResult, WSAIoctl, WSARecv, WSASend,
+    SOCKET, SOCKET_ERROR, WSA_IO_PENDING,
 };
 
 use super::net::{UnixListener, UnixStream};

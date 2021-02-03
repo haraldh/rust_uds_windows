@@ -7,8 +7,9 @@ use std::os::windows::io::{AsRawSocket, FromRawSocket, IntoRawSocket, RawSocket}
 use std::path::Path;
 use std::time::Duration;
 
-use winapi::{SO_RCVTIMEO, SO_SNDTIMEO};
-use ws2_32::{bind, connect, getpeername, getsockname, listen};
+use winapi::um::winsock2::{
+    bind, connect, getpeername, getsockname, listen, SO_RCVTIMEO, SO_SNDTIMEO,
+};
 
 use super::socket::{init, Socket};
 use super::{c, cvt, from_sockaddr_un, sockaddr_un, SocketAddr};

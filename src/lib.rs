@@ -4,12 +4,6 @@
 extern crate winapi;
 
 #[cfg(windows)]
-extern crate ws2_32;
-
-#[cfg(windows)]
-extern crate kernel32;
-
-#[cfg(windows)]
 extern crate tempdir;
 
 #[cfg(windows)]
