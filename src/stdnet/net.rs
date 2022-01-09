@@ -178,9 +178,8 @@ impl UnixStream {
     pub fn pair() -> io::Result<(Self, Self)> {
         use std::sync::{Arc, RwLock};
         use std::thread::spawn;
-        use tempdir::TempDir;
 
-        let dir = TempDir::new("rust-uds-windows")?;
+        let dir = tempfile::tempdir()?;
         let file_path = dir.path().join("socket");
         let a: Arc<RwLock<Option<io::Result<UnixStream>>>> = Arc::new(RwLock::new(None));
         let ul = UnixListener::bind(&file_path).unwrap();
@@ -603,13 +602,13 @@ impl<'a> Iterator for Incoming<'a> {
 
 #[cfg(test)]
 mod test {
-    extern crate tempdir;
+    extern crate tempfile;
 
     use std::io::{self, Read, Write};
     use std::path::PathBuf;
     use std::thread;
 
-    use self::tempdir::TempDir;
+    use self::tempfile::TempDir;
 
     use super::*;
 
@@ -623,7 +622,7 @@ mod test {
     }
 
     fn tmpdir() -> Result<(TempDir, PathBuf), io::Error> {
-        let dir = TempDir::new("mio-uds-windows")?;
+        let dir = tempfile::tempdir()?;
         let path = dir.path().join("sock");
         Ok((dir, path))
     }
@@ -710,7 +709,7 @@ mod test {
 
     #[test]
     fn long_path() {
-        let dir = or_panic!(TempDir::new("mio-uds-windows"));
+        let dir = or_panic!(tempfile::tempdir());
         let socket_path = dir.path().join(
             "asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfa\
              sasdfasdfasdasdfasdfasdfadfasdfasdfasdfasdfasdf",

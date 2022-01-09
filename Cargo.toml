@@ -15,4 +15,4 @@ default-target = "x86_64-pc-windows-msvc"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3.9", features = ["winsock2", "ws2def", "minwinbase", "ntdef", "processthreadsapi", "handleapi", "ws2tcpip", "winbase"] }
-tempdir = "0.3"
+tempfile = "3"
