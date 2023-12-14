@@ -92,7 +92,7 @@ pub trait UnixStreamExt {
     /// The number of bytes read will be returned as part of the completion
     /// notification when the I/O finishes.
     ///
-    /// # Unsafety
+    /// # Safety
     ///
     /// This function is unsafe because the kernel requires that the `buf` and
     /// `overlapped` pointers are valid until the end of the I/O operation. The
@@ -126,7 +126,7 @@ pub trait UnixStreamExt {
     /// The number of bytes written will be returned as part of the completion
     /// notification when the I/O finishes.
     ///
-    /// # Unsafety
+    /// # Safety
     ///
     /// This function is unsafe because the kernel requires that the `buf` and
     /// `overlapped` pointers are valid until the end of the I/O operation. The
@@ -163,7 +163,7 @@ pub trait UnixStreamExt {
     /// Note that to succeed this requires that the underlying socket has
     /// previously been bound via a call to `bind` to a local path.
     ///
-    /// # Unsafety
+    /// # Safety
     ///
     /// This function is unsafe because the kernel requires that the
     /// `overlapped` and `buf` pointers to be  valid until the end of the I/O
@@ -197,7 +197,7 @@ pub trait UnixStreamExt {
     /// if one occurred, along with the results of the `lpFlags` parameter of
     /// the relevant operation, if applicable.
     ///
-    /// # Unsafety
+    /// # Safety
     ///
     /// This function is unsafe as `overlapped` must have previously been used
     /// to execute an operation for this handle, and it must also be a valid
@@ -227,7 +227,7 @@ pub trait UnixListenerExt {
     /// returned. Otherwise, the error associated with the operation is returned
     /// and no overlapped operation is enqueued.
     ///
-    /// # Unsafety
+    /// # Safety
     ///
     /// This function is unsafe because the kernel requires that the
     /// `addrs` and `overlapped` pointers are valid until the end of the I/O
@@ -261,7 +261,7 @@ pub trait UnixListenerExt {
     /// if one occurred, along with the results of the `lpFlags` parameter of
     /// the relevant operation, if applicable.
     ///
-    /// # Unsafety
+    /// # Safety
     ///
     /// This function is unsafe as `overlapped` must have previously been used
     /// to execute an operation for this handle, and it must also be a valid
@@ -640,8 +640,7 @@ impl AcceptAddrsBuf {
     }
 
     fn args(&self) -> (PVOID, DWORD, DWORD, DWORD) {
-        let remote_offset =
-            unsafe { &(*std::ptr::null::<AcceptAddrsBuf>()).remote as *const _ as usize };
+        let remote_offset = memoffset::offset_of!(AcceptAddrsBuf, remote);
         (
             self as *const _ as *mut _,
             0,
