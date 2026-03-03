@@ -228,7 +228,7 @@ impl SocketAddr {
         }
     }
 
-    fn address(&self) -> AddressKind {
+    fn address(&self) -> AddressKind<'_> {
         let len = self.len as usize - sun_path_offset(&self.addr);
         // sockaddr_un::sun_path on Windows is a Win32 UTF-8 file system path
         let path = unsafe { mem::transmute::<&[c_char], &[u8]>(&self.addr.sun_path) };

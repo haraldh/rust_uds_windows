@@ -600,7 +600,7 @@ impl AcceptAddrsBuf {
     ///
     /// This function can be called after a call to `accept_overlapped` has
     /// succeeded to parse out the data that was written in.
-    pub fn parse(&self, socket: &UnixListener) -> io::Result<AcceptAddrs> {
+    pub fn parse(&self, socket: &UnixListener) -> io::Result<AcceptAddrs<'_>> {
         let mut ret = AcceptAddrs {
             local: std::ptr::null_mut(),
             local_len: 0,
