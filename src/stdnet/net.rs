@@ -9,7 +9,7 @@ use std::os::windows::io::{
 use std::path::Path;
 use std::time::Duration;
 
-use winapi::um::winsock2::{
+use windows_sys::Win32::Networking::WinSock::{
     bind, connect, getpeername, getsockname, listen, SO_RCVTIMEO, SO_SNDTIMEO,
 };
 
@@ -610,13 +610,11 @@ impl<'a> Iterator for Incoming<'a> {
 
 #[cfg(test)]
 mod test {
-    extern crate tempfile;
-
     use std::io::{self, Read, Write};
     use std::path::PathBuf;
     use std::thread;
 
-    use self::tempfile::TempDir;
+    use tempfile::TempDir;
 
     use super::*;
 

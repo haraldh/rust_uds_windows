@@ -15,7 +15,12 @@ exclude = [".gitignore", ".github"]
 default-target = "x86_64-pc-windows-msvc"
 
 [target.'cfg(windows)'.dependencies]
-winapi = { version = "0.3.9", features = ["winsock2", "ws2def", "minwinbase", "ntdef", "processthreadsapi", "handleapi", "ws2tcpip", "winbase"] }
+windows-sys = { version = ">=0.59", features = [
+    "Win32_Networking_WinSock",
+    "Win32_Foundation",
+    "Win32_System_Threading",
+    "Win32_System_IO",
+] }
 tempfile = "3"
 
 [dependencies]
