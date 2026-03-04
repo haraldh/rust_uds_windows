@@ -59,7 +59,7 @@ pub struct AcceptAddrs<'a> {
     _data: &'a AcceptAddrsBuf,
 }
 
-impl<'a> fmt::Debug for AcceptAddrs<'a> {
+impl fmt::Debug for AcceptAddrs<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt::Debug::fmt(&self._data, f)
     }
@@ -342,12 +342,12 @@ impl UnixStreamExt for UnixStream {
         buf: &mut [u8],
         overlapped: *mut OVERLAPPED,
     ) -> io::Result<Option<usize>> {
-        let mut buf = slice2buf(buf);
+        let buf = slice2buf(buf);
         let mut flags = 0;
         let mut bytes_read: u32 = 0;
         let r = WSARecv(
             self.as_raw_socket() as SOCKET,
-            &mut buf,
+            &buf,
             1,
             &mut bytes_read,
             &mut flags,
@@ -362,7 +362,7 @@ impl UnixStreamExt for UnixStream {
         buf: &[u8],
         overlapped: *mut OVERLAPPED,
     ) -> io::Result<Option<usize>> {
-        let mut buf = slice2buf(buf);
+        let buf = slice2buf(buf);
         let mut bytes_written = 0;
 
         // Note here that we capture the number of bytes written. The
@@ -383,7 +383,7 @@ impl UnixStreamExt for UnixStream {
         // [1]: https://github.com/carllerche/mio/pull/520#issuecomment-273983823
         let r = WSASend(
             self.as_raw_socket() as SOCKET,
-            &mut buf,
+            &buf,
             1,
             &mut bytes_written,
             0,
@@ -463,7 +463,7 @@ unsafe fn connect_overlapped(
 
     let ptr = CONNECTEX.get(socket)?;
     assert!(ptr != 0);
-    let connect_ex = mem::transmute::<_, ConnectEx>(ptr);
+    let connect_ex: ConnectEx = mem::transmute(ptr);
 
     let (addr_buf, addr_len) = socket_addr_to_ptrs(addr);
     let mut bytes_sent: u32 = 0;
@@ -512,7 +512,7 @@ impl UnixListenerExt for UnixListener {
 
         let ptr = ACCEPTEX.get(self.as_raw_socket() as SOCKET)?;
         assert!(ptr != 0);
-        let accept_ex = mem::transmute::<_, AcceptEx>(ptr);
+        let accept_ex: AcceptEx = mem::transmute(ptr);
 
         let mut bytes = 0;
         let (a, b, c, d) = (*addrs).args();
@@ -608,7 +608,7 @@ impl AcceptAddrsBuf {
         let ptr = GETACCEPTEXSOCKADDRS.get(socket.as_raw_socket() as SOCKET)?;
         assert!(ptr != 0);
         unsafe {
-            let get_sockaddrs = mem::transmute::<_, GetAcceptExSockaddrs>(ptr);
+            let get_sockaddrs: GetAcceptExSockaddrs = mem::transmute(ptr);
             let (a, b, c, d) = self.args();
             get_sockaddrs(
                 a,
@@ -635,7 +635,7 @@ impl AcceptAddrsBuf {
     }
 }
 
-impl<'a> AcceptAddrs<'a> {
+impl AcceptAddrs<'_> {
     /// Returns the local socket address contained in this buffer.
     #[allow(dead_code)]
     pub fn local(&self) -> Option<SocketAddr> {

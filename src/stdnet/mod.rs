@@ -173,7 +173,6 @@ impl SocketAddr {
     /// let addr = socket.local_addr().expect("Couldn't get local address");
     /// assert_eq!(addr.is_unnamed(), false);
     /// ```
-
     // TODO: Is this following section relevant on Windows? Removed from the
     //       docs for now...
     // An unnamed address:
@@ -203,7 +202,6 @@ impl SocketAddr {
     /// let addr = socket.local_addr().expect("Couldn't get local address");
     /// assert_eq!(addr.as_pathname(), Some(Path::new("/tmp/sock")));
     /// ```
-
     // TODO: Is this following section relevant on Windows? Removed from the
     //       docs for now...
     // Without a pathname:
@@ -275,7 +273,7 @@ pub fn from_path(path: &Path) -> io::Result<SocketAddr> {
 
 struct AsciiEscaped<'a>(&'a [u8]);
 
-impl<'a> fmt::Display for AsciiEscaped<'a> {
+impl fmt::Display for AsciiEscaped<'_> {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         write!(fmt, "\"")?;
         for byte in self.0.iter().cloned().flat_map(ascii::escape_default) {

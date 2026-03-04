@@ -113,7 +113,7 @@ impl Socket {
                 info.iAddressFamily,
                 info.iSocketType,
                 info.iProtocol,
-                &mut info,
+                &info,
                 0,
                 WSA_FLAG_OVERLAPPED,
             ) {

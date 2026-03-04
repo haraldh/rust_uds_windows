@@ -274,7 +274,7 @@ impl io::Read for UnixStream {
     }
 }
 
-impl<'a> io::Read for &'a UnixStream {
+impl io::Read for &UnixStream {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
         self.0.read(buf)
     }
@@ -290,7 +290,7 @@ impl io::Write for UnixStream {
     }
 }
 
-impl<'a> io::Write for &'a UnixStream {
+impl io::Write for &UnixStream {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         self.0.write(buf)
     }
@@ -596,7 +596,7 @@ pub struct Incoming<'a> {
     listener: &'a UnixListener,
 }
 
-impl<'a> Iterator for Incoming<'a> {
+impl Iterator for Incoming<'_> {
     type Item = io::Result<UnixStream>;
 
     fn next(&mut self) -> Option<io::Result<UnixStream>> {
@@ -604,7 +604,7 @@ impl<'a> Iterator for Incoming<'a> {
     }
 
     fn size_hint(&self) -> (usize, Option<usize>) {
-        (usize::max_value(), None)
+        (usize::MAX, None)
     }
 }
 
