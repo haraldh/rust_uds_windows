@@ -9,6 +9,7 @@ readme = "README.md"
 keywords = ["windows", "uds", "unix", "domain", "sockets"]
 categories = ["os::windows-apis"]
 edition = "2021"
+rust-version = "1.85"
 exclude = [".gitignore", ".github"]
 
 [package.metadata.docs.rs]
