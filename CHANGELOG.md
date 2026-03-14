@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.1] - 2026-03-14
+
+- Require `windows-sys >= 0.60` since `BOOL` moved to `windows_sys::core` in 0.60
+
 ## [1.2.0] - 2026-03-04
 
 - Migrate from unmaintained `winapi` crate to official Microsoft `windows-sys` crate
