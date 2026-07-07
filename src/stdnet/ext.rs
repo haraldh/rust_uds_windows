@@ -625,7 +625,7 @@ impl AcceptAddrsBuf {
     }
 
     fn args(&self) -> (*mut core::ffi::c_void, u32, u32, u32) {
-        let remote_offset = memoffset::offset_of!(AcceptAddrsBuf, remote);
+        let remote_offset = core::mem::offset_of!(AcceptAddrsBuf, remote);
         (
             self as *const _ as *mut _,
             0,

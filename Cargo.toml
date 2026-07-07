@@ -23,6 +23,3 @@ windows-sys = { version = ">=0.60, <0.62", features = [
     "Win32_System_IO",
 ] }
 tempfile = "3"
-
-[dependencies]
-memoffset = "0.9.0"
